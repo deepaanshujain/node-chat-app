@@ -20,6 +20,16 @@ var io = socketIO(server);
 io.on('connection', (socket) => {
 	console.log('New User Connected');
 
+	socket.emit('newMessage', {
+		from : "Admin",
+		text : "Welcome to Chat App"
+	});
+
+	socket.broadcast.emit('newMessage', {
+		from : "Admin",
+		text : "New User Joined"
+	});
+
 	socket.on('createMessage', (message) => {
 		io.emit('newMessage', {
 			from : message.from,
@@ -28,11 +38,7 @@ io.on('connection', (socket) => {
 		});
 	});
 
-	// socket.emit('newMessage', {
-	// 	from : "server",
-	// 	text : "message from server",
-	// 	createdAt : 123
-	// })
+	
 
 	socket.on('disconnect', () => {
 		console.log('User Disconnected');
