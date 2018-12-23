@@ -23,10 +23,34 @@
 	    </div>
     </div>
 
+		<script id= "message-template" type="text/template">
+				<li class ="message">
+					<div class="message__title">
+						<h4>{{from}}
+						<span>{{createdAt}}</span>
+					</div>
+					<div class="message__body">
+						<p>{{text}}</p>
+					</div>
+				</li>
+		</script>
+
+		<script id= "location-message-template" type="text/template">
+				<li class ="message">
+					<div class="message__title">
+						<h4>{{from}}
+						<span>{{createdAt}}</span>
+					</div>
+					<div class="message__body">
+						<a href= "{{href}}" target="_blank">MY Current Location</a>
+					</div>
+				</li>
+		</script>
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="/js/libs/jquery-3.3.1.min.js"></script>
 	<script src="/js/libs/moment.js"></script>
+	<script src="/js/libs/mustache.js"></script>
 	<script src="/js/index.js"></script>
 </body>
 </html>
