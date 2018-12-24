@@ -29,14 +29,21 @@ io.on('connection', (socket) => {
 	
 
 	socket.on('createMessage', (message, callback) => {
-		console.log(message);
-		io.emit('newMessage', generateMessage(message.from, message.text));
+		var user = users.getUser(socket.id);
+
+		if(user && isRealString(message.text)) {
+			io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
+		}
+		
 		callback('This is from server');
 	});
 
 	socket.on('createLocationMessage', (message, callback) => {
-		console.log(message);
-		io.emit('newLocationMessage', generateLocationMessage("Admin", message.latitude,message.longitude));
+		var user = users.getUser(socket.id);
+		
+		if(user) {
+			io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, message.latitude,message.longitude));
+		}
 	});
 
 	socket.on('join', (params, callback) => {
@@ -50,7 +57,7 @@ io.on('connection', (socket) => {
 
 		io.to(params.room).emit('updateUserList', users.getUserList(params.room));
 
-		socket.emit('newMessage', generateMessage("Admin", "Welcome to Chat App"));
+		socket.emit('newMessage', generateMessage("Admin", `Welcome to Chat App ${params.name}`));
 
 		socket.broadcast.to(params.room).emit('newMessage', generateMessage("Admin", `${params.name } has joined`));
 

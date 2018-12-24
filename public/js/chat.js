@@ -30,7 +30,7 @@ socket.on('connect', function() {
 });
 
 socket.on('updateUserList', function(users) {
-	
+
 	var ol = $('<ol></ol>');
 	users.forEach(function (user) {
 		ol.append('<li>' + user + '</li>');
@@ -40,7 +40,7 @@ socket.on('updateUserList', function(users) {
 });
 
 socket.on('disconnect' , function() {
-	console.log('Disconnected From Server');
+	//console.log('Disconnected From Server');
 });
 
 socket.on('newMessage', function(message) {
@@ -61,6 +61,7 @@ socket.on('newMessage', function(message) {
 });
 
 socket.on('newLocationMessage', function(message) {
+	//console.log(message);
 	var formattedTime = moment(message.createdAt).format('h:mm a');
 
 	var template = $('#location-message-template').html();
@@ -83,8 +84,8 @@ socket.on('newLocationMessage', function(message) {
 
 $('#message-form').on('submit', function(e) {
 	e.preventDefault();
+
 	socket.emit('createMessage', {
-		from : "User",
 		text : $('[name=message]').val()
 	}, function(data){
 		$('[name=message]').val('');
@@ -104,7 +105,7 @@ locationButton.on('click', function(){
 
 	navigator.geolocation.getCurrentPosition(function (position) {
 		locationButton.removeAttr('disabled').text('Send Location');
-		console.log(position);
+		//console.log(position);
 		socket.emit('createLocationMessage', {
 			longitude : position.coords.longitude,
 			latitude : position.coords.latitude,
