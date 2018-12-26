@@ -3,6 +3,12 @@ const http = require('http');
 //const hbs = require('hbs');
 const path = require('path');
 const socketIO = require('socket.io');
+const {ObjectID} = require('mongodb');
+
+//var {Chat} = require('./models/chat');
+var {User} = require('./models/user');
+
+var {mongoose} = require('./db/mongoose');
 
 const {generateMessage, generateLocationMessage} = require('./utils/message');
 const {isRealString} = require('./utils/validation');
@@ -74,6 +80,43 @@ io.on('connection', (socket) => {
 			io.to(user.room).emit('newMessage', generateMessage("Admin", `${user.name} has left`));
 		}
 		console.log('User Disconnected');
+	});
+
+	socket.on('checkUserType', (params, callback) => {
+		console.log(params);
+		User.getUserByEmail('abc@example.com', (error, data) => {
+			if(error) {
+				callback(error);	
+				return;
+			}
+
+			console.log(data);
+			if(data.length > 0) {
+				callback({'userFound' : 1 });	
+			} else {
+				callback({'userFound' : 0 });
+			}
+		})
+
+	});
+
+
+	socket.on('vaidateUser', (params, callback) => {
+		console.log(params);
+		// User.getUserByEmail('abc@example.com', (error, data) => {
+		// 	if(error) {
+		// 		callback(error);	
+		// 		return;
+		// 	}
+
+		// 	console.log(data);
+		// 	if(data.length > 0) {
+		// 		callback({'userFound' : 1 });	
+		// 	} else {
+		// 		callback({'userFound' : 0 });
+		// 	}
+		// })
+
 	});
 });
 
